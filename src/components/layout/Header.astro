@@ -1,14 +1,13 @@
 ---
-// Компактний редакційний хедер.
-// Аскетична навігація: лого зліва, 3 текстові пункти + кнопка-акцент справа.
-// Активний пункт визначається порівнянням Astro.url.pathname зі шляхом посилання.
+// Компактний редакційний хедер з мобільним меню через <details>.
+// Десктоп (md+): лого + 3 пункти + кнопка. Мобільне (<md): лого + кнопка-меню (<details>) + кнопка "Для вчителя".
+
+import { Menu, X } from '@lucide/astro';
 
 const base = import.meta.env.BASE_URL;
 const path = Astro.url.pathname;
 
-// Хелпер: чи активне посилання
 const isActive = (href) => {
-  // нормалізація: і `/edodatok-pryroda-lyudyna/about/`, і `/edodatok-pryroda-lyudyna/about` вважаємо однаковими
   const normalize = (s) => s.replace(/\/+$/, "");
   return normalize(path) === normalize(href);
 };
@@ -16,21 +15,21 @@ const isActive = (href) => {
 const navItems = [
   { label: "Курс", href: `${base}course/` },
   { label: "Бібліотеки", href: `${base}library/` },
-  { label: "Про", href: `${base}about/` },
+  { label: "Про курс", href: `${base}about/` },
 ];
 ---
 
-<header class="border-b border-rule bg-paper">
+<header class="border-b border-rule bg-paper relative">
   <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between gap-6">
-    <!-- Логотип: текстовий, без іконок -->
+    <!-- Логотип -->
     <a href={base} class="group flex items-baseline gap-2 no-underline">
       <span class="font-display text-xl text-ink leading-none">Природа <span class="italic text-ink-soft">&amp;</span> Людина</span>
       <span class="meta hidden sm:inline">цифрова лабораторія</span>
     </a>
 
-    <!-- Навігація -->
-    <nav aria-label="Основна навігація" class="flex items-center gap-6">
-      <ul class="hidden md:flex items-center gap-6">
+    <!-- Десктопна навігація -->
+    <nav aria-label="Основна навігація" class="hidden md:flex items-center gap-6">
+      <ul class="flex items-center gap-6">
         {navItems.map((item) => (
           <li>
             <a
@@ -54,5 +53,57 @@ const navItems = [
         Для вчителя
       </a>
     </nav>
+
+    <!-- Мобільне: кнопка "Для вчителя" + меню-розгортач -->
+    <div class="flex md:hidden items-center gap-3">
+      <a
+        href={`${base}teacher/`}
+        class="inline-flex items-center font-body text-sm px-3 py-2 border border-ink text-ink"
+      >
+        Для вчителя
+      </a>
+
+      <details class="mobile-menu relative">
+        <summary
+          class="list-none cursor-pointer p-2 -mr-2 flex items-center justify-center"
+          aria-label="Відкрити меню"
+        >
+          <Menu size={22} stroke-width={1.5} class="text-ink menu-icon-open" />
+          <X size={22} stroke-width={1.5} class="text-ink menu-icon-close" />
+        </summary>
+        <nav
+          aria-label="Мобільна навігація"
+          class="absolute right-0 top-full mt-2 w-56 bg-paper border border-rule shadow-sm z-50"
+        >
+          <ul class="flex flex-col py-2">
+            {navItems.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class:list={[
+                    "block px-5 py-3 font-body text-base text-ink hover:bg-paper-warm transition-colors",
+                    isActive(item.href) && "border-l-[3px] border-forest pl-4",
+                  ]}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </details>
+    </div>
   </div>
 </header>
+
+<style>
+  /* Прибираємо дефолтний маркер <summary> у різних браузерах */
+  .mobile-menu summary::-webkit-details-marker { display: none; }
+  .mobile-menu summary::marker { content: ""; }
+
+  /* Перемикання іконок menu/close залежно від стану <details> */
+  .mobile-menu .menu-icon-close { display: none; }
+  .mobile-menu[open] .menu-icon-open { display: none; }
+  .mobile-menu[open] .menu-icon-close { display: inline-block; }
+</style>
