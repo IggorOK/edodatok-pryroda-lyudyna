@@ -9,25 +9,44 @@
   }
 
   body {
-    font-feature-settings: "kern", "liga", "onum";
+    font-feature-settings: "kern", "liga";
     line-height: 1.6;
   }
 
-  h1, h2, h3, h4 {
+  /* H1, H2 — display (Fraunces). Великі, контрастні. */
+  h1, h2 {
     font-family: theme("fontFamily.display");
     font-feature-settings: "kern", "liga", "ss01";
-    line-height: 1.15;
-    letter-spacing: -0.01em;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: theme("colors.ink");
   }
 
+  /* H3, H4 — sans (Inter). Серйозні структурні заголовки секцій. */
+  h3, h4 {
+    font-family: theme("fontFamily.sans");
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: theme("colors.ink");
+  }
+
+  /* Тонкі редакційні лінії */
   hr {
     border: 0;
     border-top: 1px solid theme("colors.rule");
-    margin: 2rem 0;
+    margin: 3rem 0;
+  }
+
+  /* Посилання в тексті — підкреслення з offset, як у журналах */
+  a {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
   }
 }
 
 @layer components {
+  /* Skip-link — без змін */
   .skip-link {
     position: absolute;
     left: -9999px;
@@ -36,19 +55,50 @@
     padding: 0.75rem 1rem;
     background: theme("colors.ink");
     color: theme("colors.paper");
-    font-family: theme("fontFamily.mono");
+    font-family: theme("fontFamily.sans");
     font-size: 0.875rem;
+    font-weight: 500;
   }
   .skip-link:focus {
     left: 1rem;
     top: 1rem;
   }
 
-  .meta {
-    font-family: theme("fontFamily.mono");
+  /* Кікер — категорія/мітка над заголовком, sans uppercase */
+  .kicker {
+    font-family: theme("fontFamily.sans");
     font-size: 0.75rem;
-    letter-spacing: 0.08em;
+    font-weight: 600;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
+    color: theme("colors.forest");
+  }
+
+  /* Meta — для дрібних службових міток (час, тип, статус) */
+  .meta {
+    font-family: theme("fontFamily.sans");
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
     color: theme("colors.ink-soft");
+  }
+
+  /* Section-title — структурний заголовок секції в уроці */
+  .section-title {
+    font-family: theme("fontFamily.sans");
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: theme("colors.ink");
+  }
+
+  /* Caption — для підписів під фото, інфографікою */
+  .caption {
+    font-family: theme("fontFamily.sans");
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: theme("colors.ink-soft");
+    font-style: italic;
   }
 }
