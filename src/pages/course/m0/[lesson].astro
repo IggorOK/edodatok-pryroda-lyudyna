@@ -1,0 +1,84 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const allLessons = await getCollection('lessons');
+  const m0Lessons = allLessons.filter((l) => l.data.module === 'm0');
+  return m0Lessons.map((lesson) => ({
+    params: { lesson: `l${lesson.data.number}` },
+    props: { lesson },
+  }));
+}
+
+const { lesson } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const isWip = lesson.data.status === 'wip';
+
+const typeLabels = {
+  intro: "Вступний",
+  main: "Концептуальний",
+  practical: "Практика",
+  review: "Підсумковий",
+  case: "Кейс",
+};
+---
+
+<BaseLayout
+  title={`Урок ${lesson.data.number}. ${lesson.data.title}`}
+  description={lesson.data.keyQuestion}
+>
+
+  <section class="max-w-2xl mx-auto px-6 pt-20 pb-12">
+    <p class="meta mb-6">
+      <a href={`${base}course/`} class="text-ink-soft hover:text-forest border-b border-rule">Курс</a>
+      <span class="mx-2 text-ink-soft">/</span>
+      <a href={`${base}course/m0/`} class="text-ink-soft hover:text-forest border-b border-rule">Модуль 0</a>
+      <span class="mx-2 text-ink-soft">/</span>
+      <span>Урок {lesson.data.number}</span>
+    </p>
+
+    <div class="mb-3">
+      <p class="font-mono text-3xl text-forest leading-none mb-2">{String(lesson.data.number).padStart(2, '0')}</p>
+      <p class="meta">{typeLabels[lesson.data.lessonType]} · {lesson.data.time} хв{isWip ? ' · у розробці' : ''}</p>
+    </div>
+
+    <h1 class="font-display text-4xl md:text-5xl text-ink leading-[1.15] mb-8">
+      {lesson.data.title}
+    </h1>
+
+    <div class="bg-forest-pale px-8 py-8 mb-12">
+      <p class="meta mb-3 text-forest-deep">Ключове запитання</p>
+      <p class="font-display text-xl md:text-2xl text-ink leading-snug italic font-light">
+        {lesson.data.keyQuestion}
+      </p>
+    </div>
+
+    {isWip && (
+      <div class="border-l-2 border-rule pl-6 py-2 mb-12">
+        <p class="font-body text-base text-ink-soft leading-relaxed mb-4">
+          Цей урок ще в розробці. Тут буде стартовий феномен, пояснення, інтерактиви, завдання, CER-рамка і блок «Хочу більше». Структура — як описана в розділі <a href={`${base}about/`} class="text-forest hover:text-forest-deep border-b border-forest pb-0.5">«Як працювати з курсом»</a>.
+        </p>
+        <p class="font-body text-base text-ink-soft leading-relaxed">
+          Поки що можеш повернутися до <a href={`${base}course/m0/`} class="text-forest hover:text-forest-deep border-b border-forest pb-0.5">переліку уроків Модуля 0</a>.
+        </p>
+      </div>
+    )}
+
+    <!-- Навігація між уроками -->
+    <div class="flex justify-between items-center border-t border-rule pt-8 mt-12">
+      {lesson.data.number > 1 ? (
+        <a href={`${base}course/m0/l${lesson.data.number - 1}/`} class="font-body text-sm text-ink-soft hover:text-forest">
+          ← Урок {lesson.data.number - 1}
+        </a>
+      ) : <span></span>}
+
+      {lesson.data.number < 6 ? (
+        <a href={`${base}course/m0/l${lesson.data.number + 1}/`} class="font-body text-sm text-ink-soft hover:text-forest">
+          Урок {lesson.data.number + 1} →
+        </a>
+      ) : <span></span>}
+    </div>
+  </section>
+
+</BaseLayout>

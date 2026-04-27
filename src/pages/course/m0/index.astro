@@ -1,0 +1,119 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+const base = import.meta.env.BASE_URL;
+
+const allLessons = await getCollection('lessons');
+const m0Lessons = allLessons
+  .filter((lesson) => lesson.data.module === 'm0')
+  .sort((a, b) => a.data.number - b.data.number);
+
+const typeLabels = {
+  intro: "Вступний",
+  main: "Концептуальний",
+  practical: "Практика",
+  review: "Підсумковий",
+  case: "Кейс",
+};
+---
+
+<BaseLayout
+  title="Модуль 0 · Вступ"
+  description="Природа, людина і хімія як спосіб розуміння світу. 6 уроків Модуля 0."
+>
+
+  <!-- HERO МОДУЛЯ -->
+  <section class="max-w-4xl mx-auto px-6 pt-20 pb-12">
+    <p class="meta mb-6">
+      <a href={`${base}course/`} class="text-ink-soft hover:text-forest border-b border-rule">Курс</a>
+      <span class="mx-2 text-ink-soft">/</span>
+      <span>Модуль 0</span>
+    </p>
+
+    <div class="mb-3">
+      <p class="font-mono text-3xl text-forest leading-none mb-2">М0</p>
+      <p class="meta">6 уроків · 1–2 тижні · Том I</p>
+    </div>
+
+    <h1 class="font-display text-5xl md:text-6xl text-ink leading-[1.1] mb-8">
+      Вступ: <span class="italic text-forest font-light">природа, людина і хімія</span> як спосіб розуміння світу
+    </h1>
+
+    <p class="font-body text-xl text-ink-soft leading-relaxed max-w-2xl">
+      Модуль про те, як влаштована наука, як відрізнити її від міфу і чим хімія відрізняється від купи формул із підручника. Шість уроків, від першого знайомства до власного маленького дослідження.
+    </p>
+  </section>
+
+  <hr class="max-w-4xl mx-auto" />
+
+  <!-- УРОКИ -->
+  <section class="max-w-4xl mx-auto px-6 py-16">
+    <div class="mb-3">
+      <p class="font-mono text-3xl text-forest leading-none mb-2">01</p>
+      <p class="meta">Уроки модуля</p>
+    </div>
+    <h2 class="font-display text-4xl text-ink mb-12 max-w-2xl">
+      Шість кроків
+    </h2>
+
+    <ol class="space-y-4">
+      {m0Lessons.map((lesson) => {
+        const isWip = lesson.data.status === 'wip';
+        const href = `${base}course/m0/l${lesson.data.number}/`;
+
+        return (
+          <li>
+            <a
+              href={href}
+              class:list={[
+                "block p-7 pl-8 border-l-[3px] transition-colors",
+                isWip
+                  ? "bg-paper border-rule hover:bg-paper-warm"
+                  : "bg-paper-warm border-forest hover:bg-paper-deep group",
+              ]}
+            >
+              <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-3">
+                <span class="font-mono text-sm text-forest">Урок {lesson.data.number}</span>
+                <span class="meta">{typeLabels[lesson.data.lessonType]}</span>
+                <span class="meta">{lesson.data.time} хв</span>
+                {isWip && <span class="meta text-ink-soft">· у розробці</span>}
+              </div>
+
+              <h3 class:list={[
+                "font-display text-2xl leading-tight mb-3",
+                isWip ? "text-ink-soft" : "text-ink group-hover:text-forest transition-colors",
+              ]}>
+                {lesson.data.title}
+              </h3>
+
+              <p class="font-body text-base text-ink-soft leading-relaxed italic">
+                {lesson.data.keyQuestion}
+              </p>
+            </a>
+          </li>
+        );
+      })}
+    </ol>
+  </section>
+
+  <hr class="max-w-4xl mx-auto" />
+
+  <!-- НАСТУПНИЙ МОДУЛЬ -->
+  <section class="max-w-4xl mx-auto px-6 py-16">
+    <div class="mb-3">
+      <p class="font-mono text-3xl text-forest leading-none mb-2">02</p>
+      <p class="meta">Далі</p>
+    </div>
+    <a href={`${base}course/`} class="block bg-paper-warm hover:bg-paper-deep transition-colors p-7 pl-8 border-l-[3px] border-forest group">
+      <p class="meta mb-2">Модуль 1 · 24 уроки · 12–14 тижнів</p>
+      <h3 class="font-display text-2xl text-ink leading-tight mb-2 group-hover:text-forest transition-colors">
+        Хімія природних систем: рівноваги, цикли, межі
+      </h3>
+      <p class="font-body text-base text-ink-soft leading-relaxed">
+        Чому вода в одній річці прозора, а в іншій — каламутна. Як ліс, океан і атмосфера обмінюються речовинами.
+      </p>
+    </a>
+  </section>
+
+</BaseLayout>
