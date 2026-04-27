@@ -23,6 +23,9 @@ const typeLabels = {
   review: "Підсумковий",
   case: "Кейс",
 };
+
+// Розбити терміни по роздільнику ·
+const newTermsList = d.newTerms ? d.newTerms.split('·').map(t => t.trim()).filter(Boolean) : [];
 ---
 
 <BaseLayout
@@ -30,85 +33,125 @@ const typeLabels = {
   description={d.keyQuestion}
 >
 
-  <article class="max-w-2xl mx-auto px-6 pt-20 pb-24">
+  {/* HERO УРОКУ — ПОВНА ШИРИНА, ТЕМНО-ЗЕЛЕНИЙ */}
+  <section class="bg-forest text-paper">
+    <div class="max-w-4xl mx-auto px-6 pt-12 pb-16 md:pt-16 md:pb-20">
 
-    <!-- ХЛІБНІ КРИХТИ -->
-    <p class="meta mb-6">
-      <a href={`${base}course/`} class="text-ink-soft hover:text-forest border-b border-rule">Курс</a>
-      <span class="mx-2 text-ink-soft">/</span>
-      <a href={`${base}course/m0/`} class="text-ink-soft hover:text-forest border-b border-rule">Модуль 0</a>
-      <span class="mx-2 text-ink-soft">/</span>
-      <span>Урок {d.number}</span>
-    </p>
+      {/* Хлібні крихти */}
+      <nav aria-label="Breadcrumbs" class="mb-10">
+        <ol class="flex flex-wrap items-center gap-x-2 font-sans text-sm text-paper/70">
+          <li><a href={`${base}course/`} class="hover:text-paper underline underline-offset-4 decoration-paper/30">Курс</a></li>
+          <li class="text-paper/40">/</li>
+          <li><a href={`${base}course/m0/`} class="hover:text-paper underline underline-offset-4 decoration-paper/30">Модуль 0</a></li>
+          <li class="text-paper/40">/</li>
+          <li class="text-paper/90">Урок {d.number}</li>
+        </ol>
+      </nav>
 
-    <!-- ЦИФРА + МІТКА -->
-    <div class="mb-3">
-      <p class="font-mono text-3xl text-forest leading-none mb-2">{String(d.number).padStart(2, '0')}</p>
-      <p class="meta">{typeLabels[d.lessonType]} · {d.time} хв{isWip ? ' · у розробці' : ''}</p>
+      {/* Цифра + мітка */}
+      <div class="flex items-baseline gap-6 mb-8">
+        <p class="font-mono text-6xl md:text-7xl text-paper leading-none font-light">
+          {String(d.number).padStart(2, '0')}
+        </p>
+        <div>
+          <p class="kicker text-paper/70 mb-1">{typeLabels[d.lessonType]}</p>
+          <p class="font-sans text-sm text-paper/60">{d.time} хвилин{isWip ? ' · у розробці' : ''}</p>
+        </div>
+      </div>
+
+      {/* Заголовок уроку */}
+      <h1 class="font-display text-4xl md:text-5xl lg:text-6xl text-paper leading-[1.1] mb-10 max-w-3xl">
+        {d.title}
+      </h1>
+
+      {/* Ключове запитання — в hero, не окремою врізкою */}
+      <div class="border-t border-paper/20 pt-8 max-w-3xl">
+        <p class="kicker text-paper/70 mb-3">Ключове запитання</p>
+        <p class="font-display text-xl md:text-2xl text-paper italic font-light leading-snug">
+          {d.keyQuestion}
+        </p>
+      </div>
+
     </div>
+  </section>
 
-    <!-- ЗАГОЛОВОК -->
-    <h1 class="font-display text-4xl md:text-5xl text-ink leading-[1.15] mb-8">
-      {d.title}
-    </h1>
-
-    <!-- КЛЮЧОВЕ ЗАПИТАННЯ -->
-    <div class="bg-forest-pale px-8 py-8 mb-12 -mx-2 md:mx-0">
-      <p class="meta mb-3 text-forest-deep">Ключове запитання</p>
-      <p class="font-display text-xl md:text-2xl text-ink leading-snug italic font-light">
-        {d.keyQuestion}
-      </p>
-    </div>
-
-    <!-- ВЕЛИКА ІДЕЯ -->
-    {d.bigIdea && (
-      <section class="mb-12 border-l-[3px] border-forest pl-6">
-        <p class="meta mb-3">Велика ідея</p>
-        <p class="font-display text-xl text-ink leading-snug">
+  {/* ВЕЛИКА ІДЕЯ */}
+  {d.bigIdea && (
+    <section class="max-w-4xl mx-auto px-6 py-16 md:py-20">
+      <div class="border-l-[3px] border-signal pl-8 max-w-3xl">
+        <p class="kicker mb-4 text-signal">Велика ідея</p>
+        <p class="font-display text-2xl md:text-3xl text-ink leading-[1.25]">
           {d.bigIdea}
         </p>
-      </section>
-    )}
+      </div>
+    </section>
+  )}
 
-    <!-- СТАРТОВИЙ ГАЧОК -->
-    {d.hook && (
-      <section class="bg-paper-warm px-8 py-8 mb-12 -mx-2 md:mx-0">
-        <p class="meta mb-3">Стартовий гачок</p>
-        <p class="font-body text-base text-ink leading-relaxed whitespace-pre-line">
-          {d.hook}
-        </p>
-      </section>
-    )}
+  {/* СТАРТОВИЙ ГАЧОК */}
+  {d.hook && (
+    <section class="max-w-4xl mx-auto px-6 pb-16 md:pb-20">
+      <div class="bg-paper-warm">
+        <div class="h-1 bg-ochre"></div>
+        <div class="px-8 py-10 md:px-12 md:py-12">
+          <p class="kicker mb-5">Стартовий гачок</p>
+          <p class="font-body text-lg text-ink leading-relaxed whitespace-pre-line">
+            {d.hook}
+          </p>
+        </div>
+      </div>
+    </section>
+  )}
 
-    <!-- ОСНОВНИЙ МАТЕРІАЛ -->
-    {d.mainContent && (
-      <section class="mb-12">
-        <p class="meta mb-4">Основний матеріал</p>
-        <div class="font-body text-base text-ink leading-relaxed whitespace-pre-line">
+  {/* ОСНОВНИЙ МАТЕРІАЛ */}
+  {d.mainContent && (
+    <section class="max-w-4xl mx-auto px-6 pb-16 md:pb-20">
+      <div class="max-w-2xl">
+        <p class="kicker mb-5">Основний матеріал</p>
+        <div class="font-body text-lg text-ink leading-[1.75] whitespace-pre-line">
           {d.mainContent}
         </div>
-      </section>
-    )}
+      </div>
+    </section>
+  )}
 
-    <!-- ТЕРМІНИ -->
-    {(d.newTerms || d.returningTerms) && (
-      <section class="mb-12 grid md:grid-cols-2 gap-6 border-t border-b border-rule py-8">
-        {d.newTerms && (
-          <div>
-            <p class="meta mb-3">Нові терміни</p>
-            <p class="font-body text-base text-ink leading-relaxed">{d.newTerms}</p>
+  {/* ТЕРМІНИ */}
+  {(newTermsList.length > 0 || d.returningTerms) && (
+    <section class="max-w-4xl mx-auto px-6 pb-16 md:pb-20">
+      <div class="bg-forest-pale px-8 py-10 md:px-12 md:py-12">
+
+        {newTermsList.length > 0 && (
+          <div class="mb-8">
+            <p class="kicker mb-5 text-forest-deep">Нові терміни</p>
+            <ul class="flex flex-wrap gap-3">
+              {newTermsList.map((term) => (
+                <li class="font-sans text-sm font-medium text-forest-deep border border-forest/30 px-4 py-2 bg-paper">
+                  {term}
+                </li>
+              ))}
+            </ul>
           </div>
         )}
+
         {d.returningTerms && (
-          <div>
-            <p class="meta mb-3">Повертаємось до</p>
-            <p class="font-body text-base text-ink-soft leading-relaxed">{d.returningTerms}</p>
+          <div class="border-t border-forest/20 pt-6">
+            <p class="kicker mb-3 text-forest-deep">Повертаємось до</p>
+            <p class="font-body text-base text-ink-soft leading-relaxed">
+              {d.returningTerms}
+            </p>
           </div>
         )}
-      </section>
-    )}
 
-    <!-- ВІЗУАЛІЗАЦІЯ -->
+      </div>
+    </section>
+  )}
+
+  {/* ============================================================== */}
+  {/* НИЖЧЕ — СТАРІ СЕКЦІЇ. ЦЕ ТИМЧАСОВО, ПЕРЕРОБЛЯТИМЕМО НАСТУПНИМ ПРОМПТОМ. */}
+  {/* ============================================================== */}
+
+  <section class="max-w-2xl mx-auto px-6 pb-24">
+
+    {/* ВІЗУАЛІЗАЦІЯ */}
     {d.visualization && (
       <section class="mb-12">
         <p class="meta mb-3">Інфографіка</p>
@@ -118,7 +161,7 @@ const typeLabels = {
       </section>
     )}
 
-    <!-- ПРАКТИЧНЕ ЗАВДАННЯ -->
+    {/* ПРАКТИЧНЕ ЗАВДАННЯ */}
     {d.task && (
       <section class="bg-paper-deep px-8 py-8 mb-12 -mx-2 md:mx-0">
         <p class="meta mb-3">Практичне завдання</p>
@@ -128,7 +171,7 @@ const typeLabels = {
       </section>
     )}
 
-    <!-- CER-РАМКА -->
+    {/* CER-РАМКА */}
     {d.cerFrame && (
       <section class="bg-sage-pale px-8 py-8 mb-12 -mx-2 md:mx-0">
         <p class="meta mb-3">CER-рамка</p>
@@ -138,7 +181,7 @@ const typeLabels = {
       </section>
     )}
 
-    <!-- ГУМАНІТАРНІ МОСТИ -->
+    {/* ГУМАНІТАРНІ МОСТИ */}
     {d.humanitiesBridges && (
       <section class="mb-12">
         <p class="meta mb-4">Гуманітарні мости</p>
@@ -171,7 +214,7 @@ const typeLabels = {
       </section>
     )}
 
-    <!-- ЦИТАТА -->
+    {/* ЦИТАТА */}
     {d.quote && (
       <section class="bg-forest-pale px-8 py-12 mb-12 -mx-2 md:mx-0">
         <blockquote class="font-display text-xl md:text-2xl text-ink leading-snug italic font-light">
@@ -180,7 +223,7 @@ const typeLabels = {
       </section>
     )}
 
-    <!-- FUN FACT + ПРОФЕСІЯ -->
+    {/* FUN FACT + ПРОФЕСІЯ */}
     {(d.funFact || d.profession) && (
       <section class="mb-12 grid md:grid-cols-2 gap-6">
         {d.funFact && (
@@ -198,7 +241,7 @@ const typeLabels = {
       </section>
     )}
 
-    <!-- ЦИФРОВІ РЕСУРСИ -->
+    {/* ЦИФРОВІ РЕСУРСИ */}
     {d.digitalResources && (d.digitalResources.video || d.digitalResources.interactive || d.digitalResources.tool) && (
       <section class="mb-12">
         <p class="meta mb-4">Цифрові ресурси</p>
@@ -225,7 +268,7 @@ const typeLabels = {
       </section>
     )}
 
-    <!-- ДОМАШНЄ ЗАВДАННЯ -->
+    {/* ДОМАШНЄ ЗАВДАННЯ */}
     {d.homework && (
       <section class="mb-12 border-t border-rule pt-8">
         <p class="meta mb-3">Домашнє завдання</p>
@@ -235,7 +278,7 @@ const typeLabels = {
       </section>
     )}
 
-    <!-- ОЦІНЮВАННЯ -->
+    {/* ОЦІНЮВАННЯ */}
     {d.assessment && (
       <section class="mb-12">
         <p class="meta mb-3">Оцінювання</p>
@@ -245,7 +288,7 @@ const typeLabels = {
       </section>
     )}
 
-    <!-- ЗАГЛУШКА ДЛЯ WIP БЕЗ КОНТЕНТУ -->
+    {/* ЗАГЛУШКА ДЛЯ WIP БЕЗ КОНТЕНТУ */}
     {isWip && !d.bigIdea && !d.hook && !d.mainContent && (
       <div class="border-l-2 border-rule pl-6 py-2 mb-12">
         <p class="font-body text-base text-ink-soft leading-relaxed mb-4">
@@ -257,7 +300,7 @@ const typeLabels = {
       </div>
     )}
 
-    <!-- НАВІГАЦІЯ -->
+    {/* НАВІГАЦІЯ */}
     <nav class="flex justify-between items-center border-t border-rule pt-8 mt-12" aria-label="Навігація між уроками">
       {d.number > 1 ? (
         <a href={`${base}course/m0/l${d.number - 1}/`} class="font-body text-sm text-ink-soft hover:text-forest">
@@ -272,6 +315,6 @@ const typeLabels = {
       ) : <span></span>}
     </nav>
 
-  </article>
+  </section>
 
 </BaseLayout>
