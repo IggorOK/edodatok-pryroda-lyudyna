@@ -1,0 +1,26 @@
+---
+const { pageTitle, parentLabel, parentHref } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+<section class="max-w-2xl mx-auto px-6 pt-24 pb-32">
+  <p class="meta mb-8">У розробці</p>
+  <h1 class="font-display text-5xl md:text-6xl text-ink leading-[1.1] mb-8">
+    {pageTitle}
+  </h1>
+  <p class="font-body text-xl text-ink-soft leading-relaxed mb-10">
+    Ця сторінка готується. У версії V1 додатка вона буде на місці — з повним змістом, який обіцяє назва.
+  </p>
+  <p class="font-body text-base text-ink-soft leading-relaxed mb-2">
+    Поки що можеш повернутися до інших розділів:
+  </p>
+  <ul class="font-body text-base text-ink space-y-1 mb-10">
+    <li><a href={base} class="hover:text-forest border-b border-rule pb-0.5">Головна</a></li>
+    {parentHref && parentLabel && (
+      <li><a href={parentHref} class="hover:text-forest border-b border-rule pb-0.5">{parentLabel}</a></li>
+    )}
+    <li><a href={`${base}about/`} class="hover:text-forest border-b border-rule pb-0.5">Як працювати з курсом</a></li>
+  </ul>
+  <p class="font-mono text-xs text-ink-soft uppercase tracking-wider">
+    Якщо помітиш, що сторінка вже мала б працювати — напиши на сторінку <a href={`${base}support/`} class="text-forest hover:text-forest-deep">Підтримка</a>.
+  </p>
+</section>

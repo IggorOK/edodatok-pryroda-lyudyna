@@ -1,0 +1,203 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { FlaskConical, ClipboardList, Search, Headphones, BookOpen } from '@lucide/astro';
+
+const base = import.meta.env.BASE_URL;
+
+const modules = [
+  {
+    id: "m0",
+    label: "Модуль 0",
+    title: "Вступ: природа, людина і хімія як спосіб розуміння світу",
+    meta: "6 уроків · 1–2 тижні",
+    summary: "Що таке наука, як ми відрізняємо науку від міфу і чому хімія — це спосіб бачити світ.",
+    href: `${base}course/m0/`,
+    status: "available",
+  },
+  {
+    id: "m1",
+    label: "Модуль 1",
+    title: "Хімія природних систем: рівноваги, цикли, межі",
+    meta: "24 уроки · 12–14 тижнів",
+    summary: "pH, буферність, колообіги вуглецю й азоту, межі стійкості природних систем.",
+    href: `${base}course/m1/`,
+    status: "available",
+  },
+  {
+    id: "m2",
+    label: "Модуль 2",
+    title: "Атмосфера, повітря, клімат",
+    meta: "у розробці",
+    summary: null,
+    href: null,
+    status: "wip",
+  },
+];
+
+const libraries = [
+  {
+    label: "Інтерактивна лабораторія",
+    summary: "Симуляції pH, буферності, кривих Шелфорда і Лібіха — те, чого не зробити на папері.",
+    href: `${base}library/lab/`,
+    icon: FlaskConical,
+  },
+  {
+    label: "Практичні роботи",
+    summary: "Польові журнали, відеоінструкції, цифрові бланки. Для V1 — три практичні Модуля 1.",
+    href: `${base}library/practical/`,
+    icon: ClipboardList,
+  },
+  {
+    label: "Кейси",
+    summary: "Розгорнуті історії: Фінт, Семмельвейс, Калуш. Учень рухається кроками й аргументує.",
+    href: `${base}library/cases/`,
+    icon: Search,
+  },
+  {
+    label: "Медіатека",
+    summary: "14 подкастів і 18 відео з транскриптами. Поглиблення концептів, історія науки, професії.",
+    href: `${base}library/media/`,
+    icon: Headphones,
+  },
+  {
+    label: "Глосарій",
+    summary: "126 термінів Модулів 0 і 1 з пошуком і підсвіткою у текстах уроків.",
+    href: `${base}library/glossary/`,
+    icon: BookOpen,
+  },
+];
+
+const tomeTwo = [
+  { label: "М2", title: "Атмосфера" },
+  { label: "М3", title: "Ґрунт. Рослини. Токсичність" },
+  { label: "М4", title: "Зелена хімія. Річний проєкт" },
+];
+---
+
+<BaseLayout title="Природа і людина. Цифрова лабораторія">
+
+  <!-- HERO -->
+  <section class="max-w-6xl mx-auto px-6 pt-20 pb-24">
+    <p class="meta mb-8">Електронний додаток · 10–11 клас · гуманітарний профіль</p>
+
+    <h1 class="font-display text-5xl md:text-7xl text-ink leading-[1.05] mb-8 max-w-4xl">
+      Природа <span class="italic font-light text-forest">&amp;</span> Людина
+      <span class="block font-display italic text-3xl md:text-4xl text-ink-soft font-light mt-3">
+        цифрова лабораторія
+      </span>
+    </h1>
+
+    <p class="font-body text-xl text-ink-soft max-w-2xl leading-relaxed mb-10">
+      Друга половина навчального продукту — лабораторія, медіастудія і дослідницький щоденник, що відкриває те, чого папір не може дати.
+    </p>
+
+    <div class="flex flex-wrap items-center gap-4">
+      <a href={`${base}course/`} class="inline-flex items-center px-6 py-3 bg-ink text-paper font-body text-base hover:bg-forest transition-colors">
+        Почати курс
+      </a>
+      <a href={`${base}teacher/`} class="inline-flex items-center px-6 py-3 border border-ink text-ink font-body text-base hover:bg-ink hover:text-paper transition-colors">
+        Для вчителя
+      </a>
+      <a href={`${base}parents/`} class="font-body text-sm text-ink-soft hover:text-forest underline underline-offset-4 ml-2">
+        Батькам
+      </a>
+    </div>
+  </section>
+
+  <hr />
+
+  <!-- ТОМ I — МОДУЛІ -->
+  <section class="max-w-6xl mx-auto px-6 py-20">
+    <div class="mb-3">
+      <p class="font-mono text-3xl text-forest leading-none mb-2">01</p>
+      <p class="meta">Том I · 10 клас</p>
+    </div>
+    <h2 class="font-display text-4xl md:text-5xl text-ink mb-12 max-w-2xl">
+      Модулі курсу
+    </h2>
+
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {modules.map((m) => (
+        m.status === "available" ? (
+          <a href={m.href} class="block bg-paper-warm hover:bg-paper-deep transition-colors p-7 pl-8 group border-l-[3px] border-forest">
+            <p class="meta mb-4">{m.label} · {m.meta}</p>
+            <h3 class="font-display text-2xl text-ink leading-tight mb-3 group-hover:text-forest transition-colors">
+              {m.title}
+            </h3>
+            <p class="font-body text-base text-ink-soft leading-relaxed">
+              {m.summary}
+            </p>
+          </a>
+        ) : (
+          <div class="block bg-paper border border-rule p-7">
+            <p class="meta mb-4">{m.label} · {m.meta}</p>
+            <h3 class="font-display text-2xl text-ink-soft leading-tight">
+              {m.title}
+            </h3>
+          </div>
+        )
+      ))}
+    </div>
+  </section>
+
+  <hr />
+
+  <!-- БІБЛІОТЕКИ -->
+  <section class="max-w-6xl mx-auto px-6 py-20">
+    <div class="mb-3">
+      <p class="font-mono text-3xl text-forest leading-none mb-2">02</p>
+      <p class="meta">Інструменти</p>
+    </div>
+    <h2 class="font-display text-4xl md:text-5xl text-ink mb-12 max-w-2xl">
+      Бібліотеки курсу
+    </h2>
+
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {libraries.map((lib, idx) => {
+        const Icon = lib.icon;
+        return (
+          <a href={lib.href} class:list={[
+            "block bg-paper-warm hover:bg-paper-deep transition-colors p-7 pl-8 group border-l-[3px] border-forest",
+            idx === 4 && "lg:col-start-2",
+          ]}>
+            <Icon size={22} stroke-width={1.5} class="text-forest mb-5" />
+            <h3 class="font-display text-2xl text-ink leading-tight mb-3 group-hover:text-forest transition-colors">
+              {lib.label}
+            </h3>
+            <p class="font-body text-base text-ink-soft leading-relaxed">
+              {lib.summary}
+            </p>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+
+  <hr />
+
+  <!-- ТОМ II — АНОНС -->
+  <section class="max-w-6xl mx-auto px-6 py-20">
+    <div class="mb-3">
+      <p class="font-mono text-3xl text-forest leading-none mb-2">03</p>
+      <p class="meta">Том II · 11 клас</p>
+    </div>
+    <div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-6 border-t border-rule pt-8">
+      <div>
+        <h2 class="font-display text-2xl md:text-3xl text-ink-soft font-light italic mb-2">
+          У розробці
+        </h2>
+        <p class="font-body text-base text-ink-soft max-w-xl">
+          Атмосфера й клімат, ґрунт і токсичність, зелена хімія, річний проєкт. З'являться в наступних версіях додатка.
+        </p>
+      </div>
+      <ul class="flex flex-wrap gap-x-6 gap-y-2">
+        {tomeTwo.map((t) => (
+          <li class="meta">
+            <span class="text-ink">{t.label}</span> · {t.title}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+</BaseLayout>

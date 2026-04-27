@@ -1,0 +1,37 @@
+---
+// Тонкий редакційний футер. Версія, дата, службові посилання.
+const base = import.meta.env.BASE_URL;
+const buildDate = new Date().toLocaleDateString("uk-UA", {
+  year: "numeric",
+  month: "long",
+});
+---
+
+<footer class="border-t border-rule mt-24 bg-paper">
+  <div class="max-w-6xl mx-auto px-6 py-10 grid gap-8 md:grid-cols-3 text-sm">
+    <div>
+      <p class="font-display text-base text-ink mb-1">Природа <span class="italic text-ink-soft">&amp;</span> Людина</p>
+      <p class="text-ink-soft leading-relaxed">
+        Електронний додаток до посібника з хімії, екології та сталого розвитку.
+        10–11 класи, гуманітарний профіль.
+      </p>
+    </div>
+
+    <nav aria-label="Службові посилання">
+      <p class="meta mb-3">Службові</p>
+      <ul class="space-y-1.5">
+        <li><a href={`${base}about/`} class="text-ink hover:text-forest">Про курс</a></li>
+        <li><a href={`${base}imprint/`} class="text-ink hover:text-forest">Вихідні дані</a></li>
+        <li><a href={`${base}changelog/`} class="text-ink hover:text-forest">Журнал змін</a></li>
+        <li><a href={`${base}requirements/`} class="text-ink hover:text-forest">Технічні вимоги</a></li>
+        <li><a href={`${base}support/`} class="text-ink hover:text-forest">Підтримка</a></li>
+      </ul>
+    </nav>
+
+    <div class="md:text-right">
+      <p class="meta mb-3">Версія</p>
+      <p class="text-ink">V1 · підготовка до експертизи</p>
+      <p class="text-ink-soft mt-1">Збірка: {buildDate}</p>
+    </div>
+  </div>
+</footer>

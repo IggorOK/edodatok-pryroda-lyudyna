@@ -1,0 +1,58 @@
+---
+// Компактний редакційний хедер.
+// Аскетична навігація: лого зліва, 3 текстові пункти + кнопка-акцент справа.
+// Активний пункт визначається порівнянням Astro.url.pathname зі шляхом посилання.
+
+const base = import.meta.env.BASE_URL;
+const path = Astro.url.pathname;
+
+// Хелпер: чи активне посилання
+const isActive = (href) => {
+  // нормалізація: і `/edodatok-pryroda-lyudyna/about/`, і `/edodatok-pryroda-lyudyna/about` вважаємо однаковими
+  const normalize = (s) => s.replace(/\/+$/, "");
+  return normalize(path) === normalize(href);
+};
+
+const navItems = [
+  { label: "Курс", href: `${base}course/` },
+  { label: "Бібліотеки", href: `${base}library/` },
+  { label: "Про", href: `${base}about/` },
+];
+---
+
+<header class="border-b border-rule bg-paper">
+  <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between gap-6">
+    <!-- Логотип: текстовий, без іконок -->
+    <a href={base} class="group flex items-baseline gap-2 no-underline">
+      <span class="font-display text-xl text-ink leading-none">Природа <span class="italic text-ink-soft">&amp;</span> Людина</span>
+      <span class="meta hidden sm:inline">цифрова лабораторія</span>
+    </a>
+
+    <!-- Навігація -->
+    <nav aria-label="Основна навігація" class="flex items-center gap-6">
+      <ul class="hidden md:flex items-center gap-6">
+        {navItems.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class:list={[
+                "font-body text-sm text-ink hover:text-forest transition-colors",
+                isActive(item.href) && "border-b border-rule pb-0.5",
+              ]}
+              aria-current={isActive(item.href) ? "page" : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <a
+        href={`${base}teacher/`}
+        class="inline-flex items-center font-body text-sm px-4 py-2 border border-ink text-ink hover:bg-ink hover:text-paper transition-colors"
+      >
+        Для вчителя
+      </a>
+    </nav>
+  </div>
+</header>

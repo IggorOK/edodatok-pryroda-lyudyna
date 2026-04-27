@@ -1,0 +1,9 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import WipPlaceholder from "../../components/WipPlaceholder.astro";
+
+const base = import.meta.env.BASE_URL;
+---
+<BaseLayout title="Інтерактивна лабораторія">
+  <WipPlaceholder pageTitle="Інтерактивна лабораторія" parentLabel="Бібліотеки курсу" parentHref={`${base}library/`} />
+</BaseLayout>
